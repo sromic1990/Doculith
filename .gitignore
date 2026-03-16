@@ -1,0 +1,72 @@
+# ── Build directories ───────────────────────────────────────────────────────
+# CMake generates everything in here — never commit it.
+build/
+build-*/
+.build/
+
+# ── FetchContent download cache ──────────────────────────────────────────────
+# Populated during cmake configure. Regenerated on demand.
+_deps/
+
+# ── Visual Studio ────────────────────────────────────────────────────────────
+.vs/
+*.user
+*.suo
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+
+# ── VS Code ──────────────────────────────────────────────────────────────────
+.vscode/
+
+# ── CLion / JetBrains ────────────────────────────────────────────────────────
+.idea/
+cmake-build-*/
+
+# ── Compiled binaries ────────────────────────────────────────────────────────
+*.exe
+*.out
+*.app
+*.pdb
+*.dSYM/
+
+# ── Intermediate / object files ──────────────────────────────────────────────
+*.o
+*.obj
+*.lib
+*.a
+*.so
+*.dylib
+*.dll
+
+# ── CMake generated files ─────────────────────────────────────────────────────
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+install_manifest.txt
+
+# ── CTest / Catch2 output ────────────────────────────────────────────────────
+Testing/
+LastTest.log
+CTestCostData.txt
+
+# ── PDFium prebuilt binaries ──────────────────────────────────────────────────
+# These get fetched by FetchContent — no need to track them.
+*.pdfium*
+
+# ── Windows ──────────────────────────────────────────────────────────────────
+Thumbs.db
+Desktop.ini
+*.rc.bak
+
+# ── macOS ────────────────────────────────────────────────────────────────────
+.DS_Store
+*.xcworkspace
+xcuserdata/
+*.xcuserdata
+
+# ── Scratch space ────────────────────────────────────────────────────────────
+# Local throwaway files — experiments, notes, snippets. Never tracked.
+.scratch/
