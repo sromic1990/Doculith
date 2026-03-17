@@ -1,0 +1,47 @@
+name: CI
+
+# When does this pipeline run?
+on:
+    push:
+        branches: [ main ] # On every push to main
+    pull_request:
+        branches: [ main ] # On every pull request targeting main
+
+jobs:
+    #----Windows Build----
+    build-windows:
+        name: Windows (MSVC)
+        runs-on: windows-latest
+
+        steps:
+            -   name: Check out repository
+                uses: actions/checkout@v4
+
+            -   name: Configure Cmake
+                run: cmake -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release
+
+            -   name: Build
+                run: cmake --build build --config Release --parallel
+
+            -   name: Run Tests
+                run: cTest --test-dir build -C Release --output-on-failure
+
+    #----macOS Build----
+    build-macos:
+        name: macOS (Clang)
+        runs-on: macos-latest
+
+        steps:
+            -   name: Check out repository
+                uses: actions/checkout@v4
+
+            -   name: Configure CMake
+                run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+            -   name: Build
+                run: cmake --build build --parallel
+            
+            -   name: Run Tests
+                run: ctest --test-dir build --output-on-failure
+
+

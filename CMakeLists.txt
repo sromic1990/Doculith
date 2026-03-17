@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.2))
+cmake_minimum_required(VERSION 4.2)
 
 project (Doculith
     VERSION 0.1.0
@@ -42,7 +42,7 @@ target_link_libraries(doculith PRIVATE
 
 #------Compiler Warnings-------------------------
 if(MSVC)
-    target_compile_optimizations(doculith PRIVATE
+    target_compile_options(doculith PRIVATE
         /W4
         /WX
         /utf-8

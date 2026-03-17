@@ -9,7 +9,7 @@ message (STATUS "Fetching GLFW 3.4...")
 FetchContent_Declare(
     glfw
     GIT_REPOSITORY https://github.com/glfw/glfw.git
-    GIT_TAG 3.4.0
+    GIT_TAG 3.4
     GIT_SHALLOW TRUE
 )
 
@@ -22,7 +22,7 @@ set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
 FetchContent_makeAvailable(glfw)
 
 #-------Dear ImGui-------------------------
-message (STATUS "FEtching Dear ImGUI v1.92.6...")
+message (STATUS "Fetching Dear ImGUI v1.92.6...")
 
 FetchContent_Declare(
     imgui
@@ -33,11 +33,11 @@ FetchContent_Declare(
 FetchContent_makeAvailable(imgui)
 
 add_library(imgui_lib STATIC
-    ${ijmgui_SOURCE_DIR}/imgui.cpp
+    ${imgui_SOURCE_DIR}/imgui.cpp
     ${imgui_SOURCE_DIR}/imgui_draw.cpp
     ${imgui_SOURCE_DIR}/imgui_tables.cpp
     ${imgui_SOURCE_DIR}/imgui_widgets.cpp
-    ${imguui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
     ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
 )
 
@@ -74,7 +74,7 @@ FetchContent_makeAvailable(nfd)
 message(STATUS "Fetching Catch2 v3.13.0...")
 
 FetchContent_Declare(
-    catch2
+    Catch2
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
     GIT_TAG v3.13.0
     GIT_SHALLOW TRUE
