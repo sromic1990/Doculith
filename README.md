@@ -32,7 +32,7 @@ A desktop GUI tool that converts .docx files to PDF and merges them into a singl
 
 ## Prerequisites
 
-- **Visual Studio 2026** with the "Desktop development with C++" workload
+- **Visual Studio 2022** with the "Desktop development with C++" workload
 - **CMake 4.2+**
 - **Git**
 - **LibreOffice** installed and on PATH (`soffice --version` should work)
@@ -45,7 +45,7 @@ git clone [Doculith](https://github.com/sromic1990/Doculith.git)
 cd doculith
 
 # Configure (generates Visual Studio solution)
-cmake -S . -B build -G "Visual Studio 18 2026" -A x64
+cmake -S . -B build -G "Visual Studio 17 2022" -A x64
 
 # Build
 cmake --build build --config Release
@@ -61,7 +61,7 @@ cd build && ctest -C Release
 ### Milestone 1
 *Goal: A window that opens, renders, and closes cleanly.*
 
-- [ ] CMake project structure with FetchContent dependencies
+- ✅ CMake project structure with FetchContent dependencies
 - [ ] GLFW window + OpenGL context + Dear ImGui render loop
 - [ ] `Application` class with DockSpace and theme
 - [ ] Catch2 smoke test passing on CI
@@ -86,7 +86,7 @@ cd build && ctest -C Release
 ---
 
 ### Milestone 3 — Full UI
-*Goal: Something soneone'd actually want to use.*
+*Goal: Something soneone would actually want to use.*
 
 - [ ] Embedded Inter font, HiDPI scaling
 - [ ] Toolbar strip, ImGui Table API file list, controls panel — final form
