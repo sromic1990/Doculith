@@ -6,8 +6,8 @@
 
 #include "Application.h"
 
-#include <cstdio>
 #include <format>
+#include <iostream>
 #include <stdexcept>
 #include <string>
 
@@ -162,8 +162,7 @@ int main()
     }
     catch (const std::exception& e)
     {
-        auto errorFormat = std::format("{} {}", Doculith::AppStrings::ErrFatal, e.what());
-        std::fprintf(stderr, errorFormat.c_str());
+        std::cerr << std::format("{} {}\n", Doculith::AppStrings::ErrFatal, e.what());
         return 1;
     }
 
