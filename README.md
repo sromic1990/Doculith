@@ -62,9 +62,9 @@ cd build && ctest -C Release
 *Goal: A window that opens, renders, and closes cleanly.*
 
 - ✅ CMake project structure with FetchContent dependencies
-- [ ] GLFW window + OpenGL context + Dear ImGui render loop
-- [ ] `Application` class with DockSpace and theme
-- [ ] Catch2 smoke test passing on CI
+- ✅ GLFW window + OpenGL context + Dear ImGui render loop
+- ✅ `Application` class with DockSpace and theme
+- ✅ Catch2 smoke test passing on CI
 
 **Definition of done:** `cmake --build` succeeds, a styled window opens, and GitHub Actions goes green.
 
