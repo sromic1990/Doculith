@@ -4,7 +4,10 @@
 #include "imgui_impl_opengl3.h"
 #include <GLFW/glfw3.h>
 
+#include "Application.h"
+
 #include <cstdio>
+#include <format>
 #include <stdexcept>
 #include <string>
 
@@ -148,22 +151,19 @@ int main()
 {
     try
     {
-        GlfwContext glfw;
-        GlfwWindow window(1280,720, "Doculith");
-        ImGuiContextGuard imgui(window.get());
+        Doculith::ApplicationConfig config;
+        config.windowWidth = 1280;
+        config.windowHeight = 800;
+        config.windowTitle = Doculith::AppStrings::AppTagline;
+        config.vsync = true;
 
-        while(!window.shouldClose())
-        {
-            glfwPollEvents();
-
-            renderFrame(window.get());
-
-            glfwSwapBuffers(window.get());
-        }
+        Doculith::Application app(config);
+        app.run();
     }
-    catch(const std::exception& e)
+    catch (const std::exception& e)
     {
-        std::fprintf(stderr, "Fatal error: %s\n", e.what());
+        auto errorFormat = std::format("{} {}", Doculith::AppStrings::ErrFatal, e.what());
+        std::fprintf(stderr, errorFormat.c_str());
         return 1;
     }
 

@@ -29,6 +29,7 @@ include(cmake/Dependencies.cmake)
 #-------Main Executable-------------------------
 add_executable(doculith
     src/main.cpp
+    src/Application.cpp
 )
 
 target_include_directories(doculith PRIVATE
