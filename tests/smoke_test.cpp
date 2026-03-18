@@ -28,7 +28,7 @@ TEST_CASE("ApplicationConfig has sensible defaults", "[application]")
     REQUIRE(config.windowWidth == 1280);
     REQUIRE(config.windowHeight == 800);
     REQUIRE(config.vsync == true);
-    REQUIRE(config.windowTitle == Doculith::AppStrings::AppName);
+    REQUIRE(config.windowTitle == Doculith::strings::kAppName);
     REQUIRE(config.uiScale == 1.0f);
 }
 

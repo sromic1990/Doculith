@@ -11,7 +11,7 @@ int main()
         Doculith::ApplicationConfig config;
         config.windowWidth = 1280;
         config.windowHeight = 800;
-        config.windowTitle = Doculith::AppStrings::AppTagline;
+        config.windowTitle = Doculith::strings::kAppTagline;
         config.vsync = true;
 
         Doculith::Application app(config);
@@ -19,7 +19,7 @@ int main()
     }
     catch (const std::exception& e)
     {
-        std::cerr << std::format("{} {}\n", Doculith::AppStrings::ErrFatal, e.what());
+        std::cerr << std::format("{} {}\n", Doculith::strings::kErrFatal, e.what());
         return 1;
     }
 

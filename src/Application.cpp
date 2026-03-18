@@ -33,7 +33,7 @@ namespace Doculith
 	{
 		if (!glfwInit())
 		{
-			throw std::runtime_error(AppStrings::ErrGlfwInit);
+			throw std::runtime_error("glfwInit() failed!");
 		}
 	}
 
@@ -60,7 +60,7 @@ namespace Doculith
 		if (!m_window)
 		{
 			glfwTerminate();
-			throw std::runtime_error(AppStrings::ErrWindowCreate);
+			throw std::runtime_error("glfwCreateWindow() failed!");
 		}
 
 		glfwMakeContextCurrent(m_window);
@@ -79,7 +79,7 @@ namespace Doculith
 		io.IniFilename = nullptr;
 
 		ImGui_ImplGlfw_InitForOpenGL(m_window, true);
-		ImGui_ImplOpenGL3_Init(AppStrings::GLSLVersion);
+		ImGui_ImplOpenGL3_Init("#version 330 core");
 
 	}
 
@@ -258,9 +258,9 @@ namespace Doculith
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-        ImGui::Begin(AppStrings::DockSpaceWindow, nullptr, dockFlags);
+        ImGui::Begin("##DockSpaceWindow", nullptr, dockFlags);
         ImGui::PopStyleVar(3);
-        ImGuiID dockId = ImGui::GetID(AppStrings::DockSpace);
+        ImGuiID dockId = ImGui::GetID("##MainDockSpace");
         ImGui::DockSpace(dockId, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
         ImGui::End();
 
@@ -282,7 +282,7 @@ namespace Doculith
         ImGui::SetNextWindowPos(ImVec2(vp->WorkPos.x + 40.0f, vp->WorkPos.y + 40.0f), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(ImVec2(1200.0f, 720.0f), ImGuiCond_FirstUseEver);
 
-        if (!ImGui::Begin(AppStrings::PanelMain, nullptr, ImGuiWindowFlags_NoCollapse))
+        if (!ImGui::Begin(strings::kAppName, nullptr, ImGuiWindowFlags_NoCollapse))
         {
             ImGui::End();
             return;
@@ -290,11 +290,11 @@ namespace Doculith
 
         //Header bar
         ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.39f, 0.61f, 1.0f, 1.0f));
-        ImGui::Text(AppStrings::PanelMain);
+        ImGui::Text(strings::kAppName);
         ImGui::PopStyleColor();
 
         ImGui::SameLine();
-        ImGui::TextDisabled(AppStrings::AppHeaderDescription);
+        ImGui::TextDisabled(strings::kAppSubtitle);
         ImGui::Separator();
         ImGui::Spacing();
 
@@ -305,27 +305,27 @@ namespace Doculith
         const float rightWidth = totalWidth * 0.35f - ImGui::GetStyle().ItemSpacing.x;
 
         //Left: File list panel
-        ImGui::BeginChild(AppStrings::PanelFileList, ImVec2(leftWidth, 0.0f), ImGuiChildFlags_Borders);
+        ImGui::BeginChild("##FileListPanel", ImVec2(leftWidth, 0.0f), ImGuiChildFlags_Borders);
         {
-            ImGui::TextDisabled("%s (%d)", AppStrings::LabelFiles, 0);
+            ImGui::TextDisabled("%s (%d)", strings::kFilePlural, 0);
             ImGui::Separator();
             ImGui::Spacing();
 
             ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.4f, 0.4f, 0.5f, 1.0f));
-            ImGui::TextWrapped(AppStrings::InstructionToSelectFiles);
+            ImGui::TextWrapped(strings::kEmptyQueueHint);
             ImGui::PopStyleColor();
         }
         ImGui::EndChild();
 
         //Right: Control panel
         ImGui::SameLine();
-        ImGui::BeginChild(AppStrings::PanelControls, ImVec2(rightWidth, 0.0f), ImGuiChildFlags_Borders);
+        ImGui::BeginChild("##ControlsPanel", ImVec2(rightWidth, 0.0f), ImGuiChildFlags_Borders);
         {
 	        //Add Files Button
             ImGui::Spacing();
             const float buttonWidth = ImGui::GetContentRegionAvail().x;
 
-            if (ImGui::Button(AppStrings::ButtonAndFiles, ImVec2(buttonWidth, 40.0f)))
+            if (ImGui::Button(strings::kAddFileBtn, ImVec2(buttonWidth, 40.0f)))
             {
 	            //Open native picker here
             }
@@ -335,14 +335,14 @@ namespace Doculith
             ImGui::Spacing();
 
             //Output destination
-            ImGui::TextDisabled(AppStrings::LabelOutputDestination);
+            ImGui::TextDisabled(strings::kOutputPdfHeader);
             ImGui::Spacing();
 
             static char outputPath[512] = "";
             ImGui::SetNextItemWidth(buttonWidth - 70.0f);
-            ImGui::InputText(AppStrings::PanelOutputPath, outputPath, sizeof(outputPath));
+            ImGui::InputText("##OutputPath", outputPath, sizeof(outputPath));
             ImGui::SameLine();
-            if(ImGui::Button(AppStrings::ButtonBrowse, ImVec2(60.0f, 0.0f)))
+            if(ImGui::Button(strings::kBrowseBtn, ImVec2(60.0f, 0.0f)))
             {
 	            //Open folder picker here
             }
@@ -356,7 +356,7 @@ namespace Doculith
             ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.23f, 0.51f, 0.96f, 1.0f));
             ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.11f, 0.31f, 0.73f, 1.0f));
 
-            if(ImGui::Button(AppStrings::ButtonMerge, ImVec2(buttonWidth, 52.0f)))
+            if(ImGui::Button(strings::kMergeBtnLabel, ImVec2(buttonWidth, 52.0f)))
             {
 	            //Start conversion pipeline
             }
@@ -369,7 +369,7 @@ namespace Doculith
             {
                 m_showDemoWindow = !m_showDemoWindow;
             }
-            ImGui::TextDisabled(AppStrings::InstructionToggleDemoWindow);
+            ImGui::TextDisabled(strings::kDebugHint);
         }
         ImGui::EndChild();
 

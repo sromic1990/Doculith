@@ -1,45 +1,79 @@
-#pragma once
 // ─────────────────────────────────────────────────────────────────────────────
 // src/AppStrings.hpp
 //
-// Central store for all user-visible strings and app metadata.
-// No magic string literals scattered through the codebase.
-// To change any text, there is exactly one place to look.
+// All user-visible string literals are defined as name constants
+// Every string the user reads comes from here.
+// To change any user-visible text, change this file only.
 // ─────────────────────────────────────────────────────────────────────────────
+#pragma once
 
-namespace Doculith
+namespace Doculith::strings
 {
-	struct AppStrings
-	{
-		static constexpr const char* GLSLVersion							= "#version 330 core";
+	//------------------------App Identity-------------------------//
+	inline constexpr const char* kAppName									= "Doculith";
+	inline constexpr const char* kAppSubtitle								= "DOCX to PDF Merger";
+	inline constexpr const char* kAppTagline								= "Doculith - Document Merger";
+	inline constexpr const char* kDebugHint									= "F1: toggle ImGui demo";
 
-		static constexpr const char* AppName								= "Doculith";
-		static constexpr const char* AppVersion								= "0.1.0";
-		static constexpr const char* AppDescription							= "DOCX to PDF Merger";
-		static constexpr const char* AppTagline								= "Doculith - Document Merger";
-		static constexpr const char* AppHeaderDescription					= "| DOCX to PDF Merger";
-		static constexpr const char* WindowTitle							= "Doculith";
+	//--------------------------Toolbar----------------------------//
+	inline constexpr const char* kAddFileBtn								= "+ Add Files";
+	inline constexpr const char* kClearAllBtn								= "Clear All";
+	inline constexpr const char* kFileSingular								= "file";
+	inline constexpr const char* kFilePlural								= "files";
 
-		static constexpr const char* ButtonAndFiles							= "+ Add Files";
-		static constexpr const char* ButtonMerge							= "Merge";
-		static constexpr const char* ButtonBrowse							= "...";
-		static constexpr const char* LabelOutputDestination					= "Output Destination";
-		static constexpr const char* LabelOutputPath						= "Output path:";
-		static constexpr const char* LabelNoFiles							= "No files selected";
-		static constexpr const char* LabelFiles								= "Files";
+	//--------------------------File List--------------------------//
+	inline constexpr const char* kEmptyQueueHint							= "No files yet.Use '+ Add Files' to begin.";
+	inline constexpr const char* kFileColHeader								= "Document";
+	inline constexpr const char* kThumbPending								= "DOC";
+	inline constexpr const char* kThumbConverting							= "...";
+	inline constexpr const char* kThumbFailed								= "ERR";
+	inline constexpr const char* kStatusDot									= "\xe2\x97\x8f";
+	inline constexpr const char* kRemoveBtn									= "Remove";
 
-		static constexpr const char* PanelMain								= "Doculith";
-		static constexpr const char* PanelFileList							= "##FileListPanel";
-		static constexpr const char* PanelControls							= "##ControlsPanel";
-		static constexpr const char* PanelOutputPath						= "##OutputPath";
-		static constexpr const char* DockSpace								= "##MainDockSpace";
-		static constexpr const char* DockSpaceWindow						= "##DockSpaceWindow";
+	//-----------------------Control Panel-------------------------//
+	inline constexpr const char* kOutputPdfHeader							= "Output PDF";
+	inline constexpr const char* kBrowseBtn									= "...";
+	inline constexpr const char* kMergeHint									= "Set an output path above to enable Merge.";
+	inline constexpr const char* kMergeBtnLabel								= "Merge";
 
-		static constexpr const char* ErrGlfwInit							= "glfwInit() failed!";
-		static constexpr const char* ErrWindowCreate						= "glfwCreateWindow() failed!";
-		static constexpr const char* ErrFatal								= "Fatal error:";
+	//-----------------------Overlays------------------------------//
+	inline constexpr const char* kConvertingTitle							= "Converting documents...";
+	inline constexpr const char* kMergingTitle								= "Merging PDFs...";
+	inline constexpr const char* kMergingSubtext							= "Building output document";
+	inline constexpr const char* kCancellingTitle							= "Cancelling...";
+	inline constexpr const char* kCancellingSubtext							= "Wait for current conversion to complete.";
 
-		static constexpr const char* InstructionToSelectFiles				= "No files selected. Use 'Add Files' to get started.";
-		static constexpr const char* InstructionToggleDemoWindow			= "F1: Toggle ImGui demo";
-	};
+	//-----------------------Result Panels-------------------------//
+	inline constexpr const char* kSuccessTitle								= "Merge Complete";
+	inline constexpr const char* kOpenFolderBtn								= "Open Output Folder";
+	inline constexpr const char* kMergeAgainBtn								= "Merge Again";
+	inline constexpr const char* kFailureTitle								= "Operation Failed";
+	inline constexpr const char* kRetryBtn									= "Try Again";
+	inline constexpr const char* kStartOverBtn								= "Start Over";
+
+	//---------------------Startup Warning-------------------------//
+	inline constexpr const char* kWarningTitle								= "Setup Required";
+	inline constexpr const char* kWarningAdvice								= "Install LibreOffice, then restart Doculith";
+	inline constexpr const char* kDismissBtn								= "Dismiss";
+
+	//---------------------Startup Warning-------------------------//
+	inline constexpr const char* kDocFilterLabel							= "Supported Documents";
+	inline constexpr const char* kPdfFilterLabel							= "PDF Files";
+	inline constexpr const char* kDefaultPdfName							= "merged.pdf";
+
+	//-------------------Domain Error Messages---------------------//
+	//Prefixes: concatenated with a suffix (OS message, extension etc.)
+	inline constexpr const char* kErrTempDir								= "Cannot create temp directory: ";
+	inline constexpr const char* kErrNoConvertedPdfs						= "No converted PDFs to merge.";
+	inline constexpr const char* kErrOutputPathEmpty						= "Output path is empty";
+	inline constexpr const char* kErrNoMerger								= "No merger configured.";
+	inline constexpr const char* kErrConversionFailed						= "Conversion failed:\n";
+	inline constexpr const char* kErrNoConverter							= "No converter found for ";
+	inline constexpr const char* kErrNoInputPdfs							= "No input PDFs provided ";
+	inline constexpr const char* kErrInputNotFound							= "Input PDF not found: ";
+	inline constexpr const char* kErrOutputDir								= "Cannot create output directory: ";
+	inline constexpr const char* kErrOutputEmpty							= "Merge complete, but output file is missing or empty.";
+	inline constexpr const char* kErrPdfMerge								= "PDF merge error: ";
+	inline constexpr const char* kErrUnexpectedMerge						= "Unexpected error during merge: ";
+	inline constexpr const char* kErrFatal									= "Fatal error:";
 }

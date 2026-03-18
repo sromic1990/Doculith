@@ -23,7 +23,7 @@ namespace Doculith
 	{
 		int windowWidth = 1280;
 		int windowHeight = 800;
-		std::string windowTitle = AppStrings::AppName;
+		std::string windowTitle = strings::kAppName;
 		float uiScale = 1.0f;
 		bool vsync = true;
 	};
