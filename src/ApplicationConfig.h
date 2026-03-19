@@ -14,7 +14,7 @@ namespace Doculith
 		int windowWidth = 1280;
 		int windowHeight = 800;
 		std::string windowTitle = strings::kAppName;
-		float uiScale = 1.0f; //set at runtime from glfwGetWindowContentScale
+		float uiScale = 1.0f; // initial UI scale factor; configuration value, not automatically updated at runtime
 		bool vsync = true;
 	};
 	//---------------------Application Config---------------------------------
