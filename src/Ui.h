@@ -1,4 +1,4 @@
-// src/Ui.hpp
+// src/Ui.h
 // All DearImgui rendering lives here. No platform dependencies.
 // Single Responsibility: translate AppModel into pixel, report UiEvents
 
