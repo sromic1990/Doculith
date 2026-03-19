@@ -1,4 +1,5 @@
 #include "ImGuiContextGuard.h"
+#include <stdexcept>
 
 namespace Doculith
 {
@@ -12,8 +13,18 @@ namespace Doculith
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.IniFilename = nullptr;
 
-		ImGui_ImplGlfw_InitForOpenGL(window, true);
-		ImGui_ImplOpenGL3_Init("#version 330 core");
+		if (!ImGui_ImplGlfw_InitForOpenGL(window, true))
+		{
+			ImGui::DestroyContext();
+			throw std::runtime_error("Failed to initialize ImGui GLFW backend.");
+		}
+
+		if (!ImGui_ImplOpenGL3_Init("#version 330 core"))
+		{
+			ImGui_ImplGlfw_Shutdown();
+			ImGui::DestroyContext();
+			throw std::runtime_error("Failed to initialize ImGui OpenGL3 backend.");
+		}
 	}
 
 	ImGuiContextGuard::~ImGuiContextGuard()
