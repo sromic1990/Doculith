@@ -1,49 +1,20 @@
-//Top-level application orchestrator.Owns the window, the ImGui context,
-//and the application state. Drive the render loop.
+// src/Application.h
+// Single responsibility: wire PlatformContext,AppModel and Ui together.
 
 #pragma once
-
-//Include ImGUI header before GLFW to avoid OpenGL header ordering conflicts
-#include "AppStrings.h"
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-#include <GLFW/glfw3.h>
-
-#include <string>
-#include <stdexcept>
+#include "ApplicationConfig.h"
+#include "platform/PlatformContext.h"
+#include "AppModel.h"
+#include "Ui.h"
+#include "UiEvents.h"
 
 namespace Doculith
 {
-	//---------------------Application Config---------------------------------
-	//All tunable parameters for the application window and UI.
-	//Passed to Application at construction time.
-	//No buried Magic Numbers.
-	struct ApplicationConfig
-	{
-		int windowWidth = 1280;
-		int windowHeight = 800;
-		std::string windowTitle = strings::kAppName;
-		float uiScale = 1.0f;
-		bool vsync = true;
-	};
-	//---------------------Application Config---------------------------------
-
-
-	//---------------------Application----------------------------------------
-	//Owns the complete application lifetime:
-	// - GLFW context and window (RAII)
-	// - ImGui context and backends (RAII)
-	// - Application state
-	// - Render loop
-	//
-	// Non-copyable, non-movable. One application per process.
-
 	class Application
 	{
 	public:
 		explicit Application(const ApplicationConfig& config = {});
-		~Application();
+		~Application() = default;
 
 		//Not copyable or movable.
 		Application(const Application&)				= delete;
@@ -55,29 +26,11 @@ namespace Doculith
 		void run();
 
 	private:
-		//Initialization called from constructor in this order
-		void initGlfw();
-		void initWindow();
-		void initImGui();
-		void applyTheme();
-		void applyFonts();
+		void dispatch(const UiEvents& events);
 
-		//Per-frame work
-		void beginFrame();
-		void renderUI();
-		void endFrame();
-
-		//Ui Panels
-		void renderMainPanel();
-
-		//Cleanup called from destructor, in reverse init order
-		void shutdownImGui();
-		void shutdownGlfw();
-
-		ApplicationConfig m_config;
-		GLFWwindow* m_window = nullptr;
-
-		bool m_showDemoWindow = false;
+		ApplicationConfig	m_config;
+		PlatformContext		m_platform;
+		AppModel			m_model;
+		Ui					m_ui;
 	};
-	//---------------------Application----------------------------------------
 }
