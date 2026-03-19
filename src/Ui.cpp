@@ -103,6 +103,7 @@ namespace Doculith
 
             if (ImGui::Button(strings::kAddFileBtn, ImVec2(buttonWidth, 40.0f)))
             {
+                events.addFilesClicked = true;
                 //Open native picker here
             }
 
