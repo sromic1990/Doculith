@@ -15,7 +15,7 @@ namespace Doculith
         UiEvents events;
 
         renderDockSpace();
-        renderMainPanel(events, {});
+        renderMainPanel(events, model);
 
         if (m_showDemoWindow)
         {
@@ -51,7 +51,7 @@ namespace Doculith
         ImGui::End();
 	}
 
-	void Ui::renderMainPanel(UiEvents& events, const AppModel& model)
+	void Ui::renderMainPanel(UiEvents& events, const AppModel& /*model*/)
 	{
         //Position and size on first appearance. The user can resize/move it.
         const ImGuiViewport* vp = ImGui::GetMainViewport();
