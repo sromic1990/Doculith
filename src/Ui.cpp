@@ -142,7 +142,7 @@ namespace Doculith
             ImGui::Spacing();
 
             //Debug helper: toggle ImGui demo window with F1
-            if (ImGui::IsKeyPressed(ImGuiKey_F1))
+            if (ImGui::IsKeyPressed(ImGuiKey_F1, false))
             {
                 m_showDemoWindow = !m_showDemoWindow;
             }
