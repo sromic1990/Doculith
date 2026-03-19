@@ -51,7 +51,7 @@ TEST_CASE("UiEvents defaults are all false", "[ui]")
 {
     Doculith::UiEvents events;
     
-	REQUIRE(events.addFilesClicked == false);
+    REQUIRE(events.addFilesClicked == false);
     REQUIRE(events.browseOutputClicked == false);
     REQUIRE(events.clearAllClicked == false);
     REQUIRE(events.mergeClicked == false);
