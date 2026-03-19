@@ -40,7 +40,8 @@ namespace Doculith
 		//
 		// m_glfw MUST be first: glfwInit() must succeed before any window call.
 		// m_window MUST be second: window must exist before imgui backends init.
-		// m_imgui MUST be third: ImGui context must outlive window and GLFW
+		// m_imgui MUST be third: ImGui context depends on window and GLFW
+		//                        (constructed last, destroyed first for proper backend shutdown)
 		//
 		//Reordering these declarations may result in application crash
 		GlfwContext m_glfw;
