@@ -4,7 +4,7 @@
 
 #pragma once
 
-// ImGui must be initialized before GLFW
+// ImGui and its GLFW/OpenGL3 backends are included before <GLFW/glfw3.h> to satisfy header include-order requirements
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
