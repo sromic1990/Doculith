@@ -1,5 +1,5 @@
 // src/platform/ImGuiContextGuard.h
-// RAII wrapper for the ImGui context and it's GLFW + OPENGL3 backends
+// RAII wrapper for the ImGui context and its GLFW + OPENGL3 backends
 //Requires a GlfwWindow to have been constructed and made current first
 
 #pragma once
