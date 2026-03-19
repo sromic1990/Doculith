@@ -1,4 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
+#include "ApplicationConfig.h"
 
 TEST_CASE("Test infrastructure is operational","[smoke]")
 {
@@ -44,4 +45,14 @@ TEST_CASE("ApplicationConfig is configurable", "[application]")
     REQUIRE(config.windowHeight == 1080);
     REQUIRE(config.windowTitle == "My Doculith");
     REQUIRE(config.vsync == false);
+}
+
+TEST_CASE("UiEvents defaults are all false", "[ui]")
+{
+    Doculith::UiEvents events;
+    
+	REQUIRE(events.addFilesClicked == false);
+    REQUIRE(events.browseOutputClicked == false);
+    REQUIRE(events.clearAllClicked == false);
+    REQUIRE(events.mergeClicked == false);
 }
