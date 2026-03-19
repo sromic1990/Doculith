@@ -1,4 +1,4 @@
-// src/platform/PlatformContext.hpp
+// src/platform/PlatformContext.h
 //
 // Composes GlfwContext, GlfwWindow, and ImGuiContextGuard.
 // Manages the complete platform lifecycle
