@@ -21,8 +21,8 @@ namespace Doculith
 
 		GlfwWindow(const GlfwWindow&) = delete;
 		GlfwWindow& operator=(const GlfwWindow&) = delete;
-		GlfwWindow(const GlfwWindow&&) = delete;
-		GlfwWindow& operator=(const GlfwWindow&&) = delete;
+		GlfwWindow(GlfwWindow&&) = delete;
+		GlfwWindow& operator=(GlfwWindow&&) = delete;
 
 		[[nodiscard]] GLFWwindow* get() const noexcept { return m_window; }
 		[[nodiscard]] bool shouldClose() const noexcept
