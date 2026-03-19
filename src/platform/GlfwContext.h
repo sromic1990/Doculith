@@ -26,7 +26,7 @@ namespace Doculith
 
 		GlfwContext(const GlfwContext&) = delete;
 		GlfwContext& operator=(const GlfwContext&) = delete;
-		GlfwContext(const GlfwContext&&) = delete;
-		GlfwContext& operator=(const GlfwContext&&) = delete;
+		GlfwContext(GlfwContext&&) = delete;
+		GlfwContext& operator=(GlfwContext&&) = delete;
 	};
 }
