@@ -20,8 +20,8 @@ namespace Doculith
 
 		ImGuiContextGuard(const ImGuiContextGuard&)					= delete;
 		ImGuiContextGuard& operator=(const ImGuiContextGuard&)		= delete;
-		ImGuiContextGuard(const ImGuiContextGuard&&)				= delete;
-		ImGuiContextGuard& operator=(const ImGuiContextGuard&&)		= delete;
+		ImGuiContextGuard(ImGuiContextGuard&&)						= delete;
+		ImGuiContextGuard& operator=(ImGuiContextGuard&&)			= delete;
 
 	};
 }
