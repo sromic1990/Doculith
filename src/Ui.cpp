@@ -121,6 +121,7 @@ namespace Doculith
             ImGui::SameLine();
             if (ImGui::Button(strings::kBrowseBtn, ImVec2(60.0f, 0.0f)))
             {
+                events.browseOutputClicked = true;
                 //Open folder picker here
             }
 
