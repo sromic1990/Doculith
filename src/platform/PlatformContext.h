@@ -22,8 +22,8 @@ namespace Doculith
 
 		PlatformContext(const PlatformContext&)					= delete;
 		PlatformContext& operator=(const PlatformContext&)		= delete;
-		PlatformContext(const PlatformContext&&)				= delete;
-		PlatformContext& operator=(const PlatformContext&&)		= delete;
+		PlatformContext(PlatformContext&&)						= delete;
+		PlatformContext& operator=(PlatformContext&&)			= delete;
 
 		[[nodiscard]] bool shouldClose() const noexcept;
 		[[nodiscard]] float uiScale() const noexcept;
