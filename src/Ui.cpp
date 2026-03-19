@@ -135,6 +135,7 @@ namespace Doculith
             if (ImGui::Button(strings::kMergeBtnLabel, ImVec2(buttonWidth, 52.0f)))
             {
                 //Start conversion pipeline
+                events.mergeClicked = true;
             }
             ImGui::PopStyleColor(3);
 
