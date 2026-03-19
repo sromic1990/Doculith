@@ -27,6 +27,9 @@ namespace Doculith
 
 	void Application::dispatch(const UiEvents& events)
 	{
+		// TODO: Implement handling for UiEvents reported by the UI layer.
+		// Currently, all UI events are ignored, so user actions do not
+		// affect the application state.
 		(void)events;
 	}
 }
