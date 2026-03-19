@@ -28,9 +28,9 @@ namespace Doculith
 	private:
 		void dispatch(const UiEvents& events);
 
-		ApplicationConfig	m_config;
-		PlatformContext		m_platform;
-		AppModel			m_model;
-		Ui					m_ui;
+		[[maybe_unused]] ApplicationConfig	m_config;
+		PlatformContext						m_platform;
+		AppModel							m_model;
+		Ui									m_ui;
 	};
 }
