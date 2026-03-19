@@ -16,7 +16,7 @@ namespace Doculith
 
 		Ui(const Ui&)				= delete;
 		Ui& operator=(const Ui&)	= delete;
-		Ui(const Ui&&)				= delete;
+		Ui(Ui&&)					= delete;
 		Ui& operator=(Ui&&)			= delete;
 
 		// Called once after the ImGui context is created
