@@ -1,5 +1,5 @@
 // src/UiEvents.h
-// Plain struct describing user-initialized actions fired in onde frame.
+// Plain struct describing user-initialized actions fired in one frame.
 // Produced by Ui::render(), consumed by Application::dispatch().
 
 #pragma once
