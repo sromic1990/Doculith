@@ -31,7 +31,7 @@ namespace Doculith::strings
 	inline constexpr const char* kRemoveBtn									= "Remove";
 
 	//-----------------------Control Panel-------------------------//
-	inline constexpr const char* kOutputPdfHeader							= "Output PDF";
+	inline constexpr const char* kOutputPdfHeader							= "Output Destination";
 	inline constexpr const char* kBrowseBtn									= "...";
 	inline constexpr const char* kMergeHint									= "Set an output path above to enable Merge.";
 	inline constexpr const char* kMergeBtnLabel								= "Merge";
