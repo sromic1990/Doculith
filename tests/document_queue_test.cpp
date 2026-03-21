@@ -5,9 +5,20 @@
 #include "Document.h"
 #include <filesystem>
 #include <fstream>
+#include <random>
+#include <string>
 
 namespace fs = std::filesystem;
 using namespace Doculith;
+
+// Returns a unique temporary directory path using a random suffix to avoid
+// collisions when tests run concurrently or after a crashed prior run.
+static fs::path uniqueTempDir(const std::string& prefix)
+{
+	std::random_device rd;
+	const std::string suffix = std::to_string(rd()) + std::to_string(rd());
+	return fs::temp_directory_path() / (prefix + "_" + suffix);
+}
 
 // RAII helper: creates a temp directory with real .docx files
 class TempDocxFixture
@@ -15,9 +26,9 @@ class TempDocxFixture
 public:
 	TempDocxFixture()
 	{
-		m_dir = fs::temp_directory_path() / "doculith_test";
+		m_dir = uniqueTempDir("doculith_test");
 		fs::create_directories(m_dir);
-        m_dir = fs::canonical(m_dir);
+		m_dir = fs::canonical(m_dir);
 	}
 
 	~TempDocxFixture()
@@ -98,7 +109,7 @@ TEST_CASE("DocumentQueue enforces single-directory constraint", "[queue]") {
     auto a = f.create("alpha");
  
     // Create a file in a different directory.
-    fs::path otherDir = fs::temp_directory_path() / "doculith_other";
+    fs::path otherDir = uniqueTempDir("doculith_other");
     fs::create_directories(otherDir);
     fs::path b = otherDir / "beta.docx";
     std::ofstream(b).flush();
@@ -162,7 +173,7 @@ TEST_CASE("DocumentQueue clear allows new directory after clear", "[queue]") {
     auto a = f.create("a");
  
     // Create a second temp directory.
-    fs::path dir2 = fs::temp_directory_path() / "doculith_test2";
+    fs::path dir2 = uniqueTempDir("doculith_test2");
     fs::create_directories(dir2);
     dir2 = fs::canonical(dir2);
     fs::path b = dir2 / "b.docx";
