@@ -38,6 +38,14 @@ add_executable(doculith
 
 )
 
+add_library(doculith_core
+    src/DocumentQueue.cpp
+)
+
+target_link_libraries(doculith_core PUBLIC
+    nfd
+)
+
 target_include_directories(doculith PRIVATE
     src
 )
