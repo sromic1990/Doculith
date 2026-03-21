@@ -1,5 +1,6 @@
 #include "ImGuiContextGuard.h"
 #include <stdexcept>
+#include <nfd.hpp>
 
 namespace Doculith
 {
@@ -13,22 +14,16 @@ namespace Doculith
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.IniFilename = nullptr;
 
-		if (!ImGui_ImplGlfw_InitForOpenGL(window, true))
-		{
-			ImGui::DestroyContext();
-			throw std::runtime_error("Failed to initialize ImGui GLFW backend.");
-		}
+		ImGui_ImplGlfw_InitForOpenGL(window, true);
+		ImGui_ImplOpenGL3_Init("#version 330 core");
 
-		if (!ImGui_ImplOpenGL3_Init("#version 330 core"))
-		{
-			ImGui_ImplGlfw_Shutdown();
-			ImGui::DestroyContext();
-			throw std::runtime_error("Failed to initialize ImGui OpenGL3 backend.");
-		}
+		// NFD requires initialization after the window and context exist
+		NFD::Init();
 	}
 
 	ImGuiContextGuard::~ImGuiContextGuard()
 	{
+		NFD::Quit();
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
