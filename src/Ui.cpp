@@ -10,7 +10,7 @@ namespace Doculith
         ImGui::GetIO().FontGlobalScale = 1.25f;
 	}
 
-	UiEvents Ui::render(const AppModel& model)
+	UiEvents Ui::render(AppModel& model)
 	{
         UiEvents events;
 
@@ -51,7 +51,7 @@ namespace Doculith
         ImGui::End();
 	}
 
-	void Ui::renderMainPanel(UiEvents& events, const AppModel& /*model*/)
+	void Ui::renderMainPanel(UiEvents& events, AppModel& model)
 	{
         //Position and size on first appearance. The user can resize/move it.
         const ImGuiViewport* vp = ImGui::GetMainViewport();
@@ -68,7 +68,6 @@ namespace Doculith
         ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.39f, 0.61f, 1.0f, 1.0f));
         ImGui::Text(strings::kAppName);
         ImGui::PopStyleColor();
-
         ImGui::SameLine();
         ImGui::TextDisabled(strings::kAppSubtitle);
         ImGui::Separator();
@@ -78,33 +77,129 @@ namespace Doculith
         //Column proportions: 65% file area, 35% controls
         const float totalWidth = ImGui::GetContentRegionAvail().x;
         const float leftWidth = totalWidth * 0.65f;
-        const float rightWidth = totalWidth * 0.35f - ImGui::GetStyle().ItemSpacing.x;
+        //const float rightWidth = totalWidth * 0.35f - ImGui::GetStyle().ItemSpacing.x;
 
-        //Left: File list panel
-        ImGui::BeginChild("##FileListPanel", ImVec2(leftWidth, 0.0f), ImGuiChildFlags_Borders);
+        renderFileList(events, model, leftWidth);
+        ImGui::SameLine();
+        renderControlsPanel(events, model);
+
+        ImGui::End();
+	}
+
+    void Ui::renderFileList(UiEvents& events, const AppModel& model, float panelWidth)
+    {
+        ImGui::BeginChild("##FileListPanel", ImVec2(panelWidth, 0.0f), ImGuiChildFlags_Borders);
+
+        const auto& docs = model.queue.documents();
+
+        // Header row
+        const std::string header = "Files (" + std::to_string(docs.size()) + ")";
+        ImGui::TextDisabled("%s", header.c_str());
+        ImGui::Separator();
+        ImGui::Spacing();
+
+        // Empty docs state
+        if (docs.empty())
         {
-            ImGui::TextDisabled("%s (%d)", strings::kFilePlural, 0);
-            ImGui::Separator();
-            ImGui::Spacing();
-
-            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.4f, 0.4f, 0.5f, 1.0f));
-            ImGui::TextWrapped(strings::kEmptyQueueHint);
+            const float childH = ImGui::GetContentRegionAvail().y;
+            ImGui::SetCursorPosY(ImGui::GetCursorPosY() + childH * 0.4f);
+            const char* msg = "No files selected. Use '+ Add Files' to begin.";
+            const ImVec2 textSz = ImGui::CalcTextSize(msg);
+            ImGui::SetCursorPosX((panelWidth - textSz.x) * 0.5f);
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.35f, 0.35f, 0.45f, 1.0f));
+            ImGui::TextUnformatted(msg);
             ImGui::PopStyleColor();
+            ImGui::EndChild();
+            return;
         }
+
+        // Document rows
+        // Track any deferred remove request
+        // We record the index and act AFTER the loop.
+        // Removing during iteration would invalidate the docs reference.
+        // Then underlying vector may reallocate
+        std::optional<std::size_t> pendingRemove;
+
+        for (std::size_t i =0; i < docs.size(); ++i)
+        {
+            const auto& doc = docs[i];
+
+            // PushID gives each row a unique ID scope.
+            // Without this, all remove buttons will share the same ImGui ID, 
+            // and only the last one would respond correctly.
+            ImGui::PushID(static_cast<int>(i));
+
+            // Status dot
+            ImVec4 dotColor = ImVec4(0.4f, 0.4f, 0.5f, 1.0f); // Pending (grey)
+            if (doc.status == ConversionStatus::Converting)
+                dotColor = ImVec4(1.0f, 0.8f, 0.2f, 1.0f); // Yellow
+            if (doc.status == ConversionStatus::Done)
+                dotColor = ImVec4(0.2f, 0.9f, 0.4f, 1.0f); // Green
+            if (doc.status == ConversionStatus::Failed)
+                dotColor = ImVec4(1.0f, 0.3f, 0.3f, 1.0f); // Red
+
+            ImGui::PushStyleColor(ImGuiCol_Text, dotColor);
+            ImGui::TextUnformatted("●");
+            ImGui::PopStyleColor();
+            ImGui::SameLine(0.0f, 8.0f);
+
+            // Filename
+            ImGui::TextUnformatted(doc.displayName.c_str());
+
+            // Show the source directory path in muted text below the filename
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.4f, 0.4f, 0.5f, 1.0f));
+            ImGui::Text(" %s", doc.sourcePath.parent_path().string().c_str());
+            ImGui::PopStyleColor();
+
+            // Error message
+            if (doc.status == ConversionStatus::Failed && !doc.errorMessage.empty())
+            {
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.4f, 0.4f, 1.0f));
+                ImGui::Text(" Error: %s", doc.errorMessage.c_str());
+                ImGui::PopStyleColor();
+            }
+
+            // Remove button (right-aligned)
+            constexpr float removeW = 70.0f;
+            const float cursorX = ImGui::GetCursorPosX();
+            const float availX  = ImGui::GetContentRegionAvail().x;
+            float buttonX = cursorX + availX - removeW;
+            if (buttonX < cursorX)
+                buttonX = cursorX;
+            ImGui::SameLine(buttonX);
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.28f, 0.08f, 0.08f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.5f, 0.12f, 0.12f, 1.0f));
+            if (ImGui::SmallButton(strings::kRemoveBtn))
+            {
+                pendingRemove = i; // Deferred, applied after the loop
+            }
+
+            ImGui::PopStyleColor(2);
+
+            ImGui::Separator();
+            ImGui::PopID();
+        }
+
         ImGui::EndChild();
 
-        //Right: Control panel
-        ImGui::SameLine();
-        ImGui::BeginChild("##ControlsPanel", ImVec2(rightWidth, 0.0f), ImGuiChildFlags_Borders);
+        if (pendingRemove.has_value())
         {
-            //Add Files Button
-            ImGui::Spacing();
+            events.removeAtIndex = *pendingRemove;
+        }
+    }
+
+    void Ui::renderControlsPanel(UiEvents& events, AppModel& model)
+    {
+        ImGui::BeginChild("##ControlsPanel", ImVec2(0.0f, 0.0f), ImGuiChildFlags_Borders);
+        {
+        	ImGui::Spacing();
             const float buttonWidth = ImGui::GetContentRegionAvail().x;
 
+            //Add Files Button
             if (ImGui::Button(strings::kAddFileBtn, ImVec2(buttonWidth, 40.0f)))
             {
-                events.addFilesClicked = true;
-                //Open native picker here
+	            //Open native picker here
+	            events.addFilesClicked = true;
             }
 
             ImGui::Spacing();
@@ -115,14 +210,21 @@ namespace Doculith
             ImGui::TextDisabled(strings::kOutputPdfHeader);
             ImGui::Spacing();
 
-            static char outputPath[512] = "";
             ImGui::SetNextItemWidth(buttonWidth - 70.0f);
-            ImGui::InputText("##OutputPath", outputPath, sizeof(outputPath));
+            ImGui::InputText("##OutputPath", model.outputPathBuf, sizeof(model.outputPathBuf));
             ImGui::SameLine();
             if (ImGui::Button(strings::kBrowseBtn, ImVec2(60.0f, 0.0f)))
             {
-                events.browseOutputClicked = true;
-                //Open folder picker here
+	            //Open folder picker here
+	            events.browseOutputClicked = true;
+            }
+
+            // Show the source directory for context
+            if(const auto srcDir = model.queue.sourceDirectory())
+            {
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.35f, 0.35f, 0.45f, 1.0f));
+                ImGui::TextWrapped("Source: %s", srcDir->string().c_str());
+                ImGui::PopStyleColor();
             }
 
             ImGui::Spacing();
@@ -130,6 +232,8 @@ namespace Doculith
             ImGui::Spacing();
 
             //Merge button: full width, taller, prominent
+            const bool canMerge = !model.queue.empty();
+            ImGui::BeginDisabled(!canMerge);
             ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.14f, 0.39f, 0.92f, 1.0f));
             ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.23f, 0.51f, 0.96f, 1.0f));
             ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.11f, 0.31f, 0.73f, 1.0f));
@@ -140,6 +244,18 @@ namespace Doculith
                 events.mergeClicked = true;
             }
             ImGui::PopStyleColor(3);
+            ImGui::EndDisabled();
+
+            // Feedback message
+            if (!model.addFeedback.empty())
+            {
+                ImGui::Spacing();
+                ImGui::Separator();
+                ImGui::Spacing();
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 0.75f, 1.0f, 1.0f));
+                ImGui::TextWrapped("%s", model.addFeedback.c_str());
+                ImGui::PopStyleColor();
+            }
 
             ImGui::Spacing();
 
@@ -151,11 +267,9 @@ namespace Doculith
             ImGui::TextDisabled(strings::kDebugHint);
         }
         ImGui::EndChild();
+    }
 
-        ImGui::End();
-	}
-
-	void Ui::applyTheme()
+    void Ui::applyTheme()
 	{
         ImGuiStyle& style = ImGui::GetStyle();
 

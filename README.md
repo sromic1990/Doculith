@@ -136,7 +136,7 @@ main
 
 ---
 
-## Project Structure (target state after Ch. 2)
+## Project Structure
 
 ```
 doculith/

@@ -2,6 +2,7 @@
 
 add_executable(doculith_tests
     smoke_test.cpp
+    document_queue_test.cpp
 )
 
 target_include_directories(doculith_tests PRIVATE
@@ -11,7 +12,7 @@ target_include_directories(doculith_tests PRIVATE
 target_link_libraries(doculith_tests PRIVATE
     Catch2::Catch2WithMain
     imgui_lib
-    nfd
+    doculith_core
 )
 
 include(Catch)

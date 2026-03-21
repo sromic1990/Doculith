@@ -26,6 +26,15 @@ endif()
 # All external libraries are declared and fetched in cmake/Dependencies.cmake
 include(cmake/Dependencies.cmake)
 
+#-------Core Library----------------------------
+add_library(doculith_core
+    src/DocumentQueue.cpp
+)
+
+target_include_directories(doculith_core PUBLIC
+    src
+)
+
 #-------Main Executable-------------------------
 add_executable(doculith
     src/main.cpp
@@ -34,20 +43,23 @@ add_executable(doculith
     src/platform/GlfwWindow.cpp
     src/platform/ImGuiContextGuard.cpp
     src/platform/PlatformContext.cpp
-
-)
-
-target_include_directories(doculith PRIVATE
-    src
 )
 
 target_link_libraries(doculith PRIVATE
+    doculith_core
     imgui_lib
     nfd
 )
 
 #------Compiler Warnings-------------------------
 if(MSVC)
+    target_compile_options(doculith_core PRIVATE
+        /W4
+        /WX
+        /utf-8
+        /wd4100 # unreferenced formal parameter
+        /wd4201 # nonstandard extension used: nameless struct/union
+    )
     target_compile_options(doculith PRIVATE
         /W4
         /WX
@@ -57,6 +69,12 @@ if(MSVC)
     )
 else()
     # Clang and GCC
+    target_compile_options(doculith_core PRIVATE
+        -Wall
+        -Wextra
+        -Werror
+        -Wpedantic
+    )
     target_compile_options(doculith PRIVATE
         -Wall
         -Wextra
