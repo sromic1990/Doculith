@@ -1,4 +1,6 @@
 #include "Application.h"
+#include <algorithm>
+#include <cstring>
 #include <nfd.hpp>
 
 namespace Doculith
