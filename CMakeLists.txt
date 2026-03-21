@@ -26,24 +26,27 @@ endif()
 # All external libraries are declared and fetched in cmake/Dependencies.cmake
 include(cmake/Dependencies.cmake)
 
-#-------Main Executable-------------------------
-add_executable(doculith
-    src/main.cpp
-    src/Application.cpp
-    src/DocumentQueue.cpp
-    src/Ui.cpp
-    src/platform/GlfwWindow.cpp
-    src/platform/ImGuiContextGuard.cpp
-    src/platform/PlatformContext.cpp
-
-)
-
+#-------Core Library----------------------------
 add_library(doculith_core
     src/DocumentQueue.cpp
 )
 
+target_include_directories(doculith_core PUBLIC
+    src
+)
+
 target_link_libraries(doculith_core PUBLIC
     nfd
+)
+
+#-------Main Executable-------------------------
+add_executable(doculith
+    src/main.cpp
+    src/Application.cpp
+    src/Ui.cpp
+    src/platform/GlfwWindow.cpp
+    src/platform/ImGuiContextGuard.cpp
+    src/platform/PlatformContext.cpp
 )
 
 target_include_directories(doculith PRIVATE
@@ -52,7 +55,7 @@ target_include_directories(doculith PRIVATE
 
 target_link_libraries(doculith PRIVATE
     imgui_lib
-    nfd
+    doculith_core
 )
 
 #------Compiler Warnings-------------------------
