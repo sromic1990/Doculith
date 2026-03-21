@@ -161,7 +161,12 @@ namespace Doculith
 
             // Remove button (right-aligned)
             constexpr float removeW = 70.0f;
-            ImGui::SameLine(panelWidth - removeW - ImGui::GetStyle().WindowPadding.x);
+            const float cursorX = ImGui::GetCursorPosX();
+            const float availX  = ImGui::GetContentRegionAvail().x;
+            float buttonX = cursorX + availX - removeW;
+            if (buttonX < cursorX)
+                buttonX = cursorX;
+            ImGui::SameLine(buttonX);
             ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.28f, 0.08f, 0.08f, 1.0f));
             ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.5f, 0.12f, 0.12f, 1.0f));
             if (ImGui::SmallButton(strings::kRemoveBtn))
