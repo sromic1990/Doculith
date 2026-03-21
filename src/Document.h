@@ -2,7 +2,7 @@
 //
 // Single representation of a queue entry from enqueue to success.
 // Plain value type. Copyable and movable.
-// ConversionStatus and Document live here together, they are inseperable.
+// ConversionStatus and Document live here together, they are inseparable.
 
 #pragma once
 #include <filesystem>
