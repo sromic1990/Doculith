@@ -10,6 +10,7 @@
 
 namespace Doculith
 {
+	namespace fs = std::filesystem;
 	class Application
 	{
 	public:
@@ -22,11 +23,19 @@ namespace Doculith
 		Application(Application&&)					= delete;
 		Application& operator= (Application&&)		= delete;
 
-		//Enters the render loop.Returns when the user closes the window.
+		//Enters the render loop. Returns when the user closes the window.
 		void run();
 
 	private:
 		void dispatch(const UiEvents& events);
+
+		// Event handlers, called from dispatch.
+		void onAddFilesClicked();
+		void onBrowseOutputClicked();
+		void onClearAllClicked();
+		void onRemoveAt(std::size_t index);
+
+		void clearModel(bool emptyQueue = true);
 
 		[[maybe_unused]] ApplicationConfig	m_config;
 		PlatformContext						m_platform;
