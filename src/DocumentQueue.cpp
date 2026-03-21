@@ -2,6 +2,7 @@
 
 #include "DocumentQueue.h"
 #include <algorithm>
+#include <cctype>
 
 namespace Doculith
 {
