@@ -14,9 +14,20 @@ namespace Doculith
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.IniFilename = nullptr;
 
-		ImGui_ImplGlfw_InitForOpenGL(window, true);
-		ImGui_ImplOpenGL3_Init("#version 330 core");
+		bool glfwInitOk = ImGui_ImplGlfw_InitForOpenGL(window, true);
+		if (!glfwInitOk)
+		{
+			ImGui::DestroyContext();
+			throw std::runtime_error("Failed to initialize ImGui GLFW backend.");
+		}
 
+		bool gl3InitOk = ImGui_ImplOpenGL3_Init("#version 330 core");
+		if (!gl3InitOk)
+		{
+			ImGui_ImplGlfw_Shutdown();
+			ImGui::DestroyContext();
+			throw std::runtime_error("Failed to initialize ImGui OpenGL3 backend.");
+		}
 		// NFD requires initialization after the window and context exist
 		NFD::Init();
 	}
