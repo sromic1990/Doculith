@@ -62,7 +62,7 @@ namespace Doculith
 
 		if (result.added > 0 && result.rejected > 0)
 		{
-			result.feedback = std::to_string(result.added) + "file(s) added. "
+			result.feedback = std::to_string(result.added) + " file(s) added. "
 				+ std::to_string(result.rejected) + " skipped "
 				+ "(wrong type, duplicate or different folder).";
 		}
