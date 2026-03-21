@@ -43,7 +43,7 @@ namespace Doculith
 	{
 		// Open the native multi-select file dialog
 		NFD::UniquePathSet outPaths; // UniquePathSet for multi-select.
-		const nfdu8filteritem_t filterList[] = 
+		constexpr nfdu8filteritem_t filterList[] = 
 		{
 			{ "Word Documents", "docx" }
 		};
@@ -88,7 +88,8 @@ namespace Doculith
 	{
 		// Single file save dialog for output PDF path
 		NFD::UniquePath outPath;
-		const nfdu8filteritem_t filterList[] = {
+		constexpr nfdu8filteritem_t filterList[] = 
+		{
 			{"PDF Files", "pdf" }
 		};
 
