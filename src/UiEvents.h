@@ -3,6 +3,7 @@
 // Produced by Ui::render(), consumed by Application::dispatch().
 
 #pragma once
+#include <cstddef>
 #include <optional>
 
 namespace Doculith
