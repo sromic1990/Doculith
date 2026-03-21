@@ -7,7 +7,7 @@
 #pragma once
 #include <filesystem>
 #include <string>
-#include <cstdio>
+#include <cstdint>
 
 namespace Doculith
 {
