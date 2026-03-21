@@ -1,12 +1,13 @@
 // src/DocumentQueue.cpp
 
 #include "DocumentQueue.h"
+#include <algorithm>
 
 namespace Doculith
 {
 	namespace fs = std::filesystem;
 
-	Doculith::AddResult Doculith::DocumentQueue::addFiles(const std::vector<std::filesystem::path>& paths)
+	AddResult DocumentQueue::addFiles(const std::vector<std::filesystem::path>& paths)
 	{
 		AddResult result;
 
@@ -26,7 +27,12 @@ namespace Doculith
 
 			// Must have DOCX extension (case-insensitive)
 			auto ext = canonical.extension().string();
-			std::ranges::transform(ext, ext.begin(), ::tolower);
+			std::ranges::transform(ext, ext.begin(), 
+				[](unsigned char c) -> char
+				{
+					return static_cast<char>(std::tolower(c));
+				}
+			);
 			if (ext != ".docx") { ++result.rejected; continue; }
 
 			// No duplicates
@@ -72,7 +78,7 @@ namespace Doculith
 		return result;
 	}
 
-	void Doculith::DocumentQueue::removeAt(std::size_t index)
+	void DocumentQueue::removeAt(std::size_t index)
 	{
 		if (index >= m_docs.size()) return;
 		m_docs.erase(m_docs.begin() + static_cast<std::ptrdiff_t>(index));
@@ -83,7 +89,7 @@ namespace Doculith
 		}
 	}
 
-	void Doculith::DocumentQueue::move(std::size_t from, std::size_t to)
+	void DocumentQueue::move(std::size_t from, std::size_t to)
 	{
 		if (from == to) return;
 		if (from >= m_docs.size() || to >= m_docs.size()) return;
@@ -108,13 +114,13 @@ namespace Doculith
 		}
 	}
 
-	void Doculith::DocumentQueue::clear()
+	void DocumentQueue::clear()
 	{
 		m_docs.clear();
 		m_sourceDirectory.reset();
 	}
 
-	void Doculith::DocumentQueue::setStatus(std::size_t index, ConversionStatus status,
+	void DocumentQueue::setStatus(std::size_t index, ConversionStatus status,
 		const std::filesystem::path& pdfPath, const std::string& errorMsg)
 	{
 		if (index >= m_docs.size()) return;
@@ -123,24 +129,24 @@ namespace Doculith
 		m_docs[index].errorMessage = errorMsg;
 	}
 
-	void Doculith::DocumentQueue::setThumbnailId(std::size_t index, std::uint32_t id)
+	void DocumentQueue::setThumbnailId(std::size_t index, std::uint32_t id)
 	{
 		if (index >= m_docs.size()) return;
 		m_docs[index].thumbnailTextureId = id;
 	}
 
-	std::optional<std::filesystem::path> Doculith::DocumentQueue::sourceDirectory() const noexcept
+	std::optional<std::filesystem::path> DocumentQueue::sourceDirectory() const noexcept
 	{
 		return m_sourceDirectory;
 	}
 
-	std::optional<std::filesystem::path> Doculith::DocumentQueue::suggestedOutputPath() const
+	std::optional<std::filesystem::path> DocumentQueue::suggestedOutputPath() const
 	{
 		if (!m_sourceDirectory.has_value()) return std::nullopt;
 		return *m_sourceDirectory / "merged.pdf";
 	}
 
-	bool Doculith::DocumentQueue::allConverted() const noexcept
+	bool DocumentQueue::allConverted() const noexcept
 	{
 		if (m_docs.empty()) return false;
 
