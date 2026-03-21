@@ -30,6 +30,7 @@ include(cmake/Dependencies.cmake)
 add_executable(doculith
     src/main.cpp
     src/Application.cpp
+    src/DocumentQueue.cpp
     src/Ui.cpp
     src/platform/GlfwWindow.cpp
     src/platform/ImGuiContextGuard.cpp
