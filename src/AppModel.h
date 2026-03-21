@@ -3,6 +3,9 @@
 
 #pragma once
 #include "DocumentQueue.h"
+#include <algorithm>
+#include <cstring>
+#include <string>
 
 namespace Doculith
 {
