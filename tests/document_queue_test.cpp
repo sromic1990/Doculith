@@ -17,6 +17,7 @@ public:
 	{
 		m_dir = fs::temp_directory_path() / "doculith_test";
 		fs::create_directories(m_dir);
+        m_dir = fs::canonical(m_dir);
 	}
 
 	~TempDocxFixture()
@@ -163,6 +164,7 @@ TEST_CASE("DocumentQueue clear allows new directory after clear", "[queue]") {
     // Create a second temp directory.
     fs::path dir2 = fs::temp_directory_path() / "doculith_test2";
     fs::create_directories(dir2);
+    dir2 = fs::canonical(dir2);
     fs::path b = dir2 / "b.docx";
     std::ofstream(b).flush();
  
