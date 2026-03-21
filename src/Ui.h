@@ -24,11 +24,15 @@ namespace Doculith
 		void applyFonts(float uiScale);
 
 		// Called once per frame. Renders the UI and returns this frame's events.
-		UiEvents render(const AppModel& model);
+		// render() takes AppModel& because ImGui::InputText writes directly into model.outputPathBuf
+		// All other mutations flow through the returned UiEvents.
+		UiEvents render(AppModel& model);
 
 	private:
 		void renderDockSpace();
-		void renderMainPanel(UiEvents& events, const AppModel& model);
+		void renderMainPanel(UiEvents& events, AppModel& model);
+		void renderFileList(UiEvents& events, const AppModel& model, float panelWidth);
+		void renderControlsPanel(UiEvents& events, AppModel& model);
 
 		//Demo Window state is internal to the UI layer, it is not business logic
 		bool m_showDemoWindow = false;
