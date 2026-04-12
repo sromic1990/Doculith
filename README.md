@@ -60,23 +60,24 @@ cd build && ctest -C Release
 
 ```
 main
- └── feature/cmake-setup
- └── feature/hello-window
- └── feature/file-picker
- └── ...
+ └── dev
+      └── feature/cmake-setup
+      └── feature/hello-window
+      └── feature/file-picker
+      └── ...
 ```
 
 - **`main`** is always buildable. Never commit directly to it.
 - **`dev`** is the development branch.
 - Every **feature on a branch** (`feature/short-description`) is branched off from dev.
 - When a feature is complete: open a Pull Request, review diff, merge to dev, then to main.
-- Tag each milestone: `git tag milestone-1`, `git tag milestone-2`, etc.
+- Tag each release: `git tag v1.0.0`, `git tag v1.1.0`, etc.
 
 ### Why this structure?
 
 - Forces review code before it lands
 - Gives a clean history that someone can actually read later
-- The tags mean someone can always `git checkout milestone-1` and have a working app
+- The tags mean someone can always `git checkout v1.0.0` and have a working app
 
 ---
 
