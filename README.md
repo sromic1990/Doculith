@@ -56,63 +56,6 @@ cd build && ctest -C Release
 
 ---
 
-## Development Milestones
-
-### Milestone 1
-*Goal: A window that opens, renders, and closes cleanly.*
-
-- ✅ CMake project structure with FetchContent dependencies
-- ✅ GLFW window + OpenGL context + Dear ImGui render loop
-- ✅ `Application` class with DockSpace and theme
-- ✅ Catch2 smoke test passing on CI
-
-**Definition of done:** `cmake --build` succeeds, a styled window opens, and GitHub Actions goes green.
-
----
-
-### Milestone 2
-*Goal: Files go in, a merged PDF comes out.*
-
-- [ ] `DocumentQueue` data model with `std::filesystem` paths
-- [ ] Native file picker via NFD-Extended
-- [ ] `DocxConverter` — spawns LibreOffice headless via `CreateProcess`
-- [ ] `ConversionCoordinator` — async conversion with `std::future`, UI stays alive
-- [ ] `PdfMerger` — PoDoFo stitches PDFs together
-- [ ] `MergeCoordinator` — async merge pipeline
-- [ ] `ThumbnailRasteriser` + `ThumbnailCache` — PDFium + OpenGL textures
-
-**Definition of done:** `.docx` files can be picked, click Convert & Merge, and get a single PDF with thumbnail previews.
-
----
-
-### Milestone 3 — Full UI
-*Goal: Something soneone would actually want to use.*
-
-- [ ] Embedded Inter font, HiDPI scaling
-- [ ] Toolbar strip, ImGui Table API file list, controls panel — final form
-- [ ] Drag-and-drop reordering with visual drop indicator
-- [ ] Keyboard reordering (accessibility)
-- [ ] `std::variant` state machine replacing `AppState` enum
-- [ ] Exhaustive `std::visit` dispatch — impossible states unrepresentable
-
-**Definition of done:** The app handles all edge cases gracefully, looks polished, and the state machine makes illegal transitions a compile error.
-
----
-
-### Milestone 4 — Ship It
-*Goal: Tested, packaged, and CI green.*
-
-- [ ] `IConverter` interface + `MockConverter` for unit testing without LibreOffice
-- [ ] Full test suite: unit, integration, and end-to-end
-- [ ] Application icon (`.rc` resource file on Windows)
-- [ ] LibreOffice detection with startup warning overlay
-- [ ] `--version` and `--help` CLI flags
-- [ ] GitHub Actions CI with dependency caching — builds in < 5 min on warm cache
-
-**Definition of done:** CI is green, the app ships with an icon, and missing LibreOffice is handled gracefully rather than crashing.
-
----
-
 ## Branching Strategy
 
 ```
@@ -124,14 +67,15 @@ main
 ```
 
 - **`main`** is always buildable. Never commit directly to it.
-- Every **feature on a branch** (`feature/short-description`).
-- When a feature is complete: open a Pull Request, review diff, merge.
+- **`dev`** is the development branch.
+- Every **feature on a branch** (`feature/short-description`) is branched off from dev.
+- When a feature is complete: open a Pull Request, review diff, merge to dev, then to main.
 - Tag each milestone: `git tag milestone-1`, `git tag milestone-2`, etc.
 
 ### Why this structure?
 
 - Forces review code before it lands
-- Gives a clean history someone can actually read later
+- Gives a clean history that someone can actually read later
 - The tags mean someone can always `git checkout milestone-1` and have a working app
 
 ---
